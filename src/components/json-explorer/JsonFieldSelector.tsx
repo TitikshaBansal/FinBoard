@@ -11,6 +11,7 @@ interface JsonFieldSelectorProps {
   selectedFields: SelectedField[];
   onFieldsChange: (fields: SelectedField[]) => void;
   displayMode: 'card' | 'table' | 'chart';
+  onDisplayModeChange?: (mode: 'card' | 'table' | 'chart') => void;
 }
 
 export const JsonFieldSelector: React.FC<JsonFieldSelectorProps> = ({
@@ -18,6 +19,7 @@ export const JsonFieldSelector: React.FC<JsonFieldSelectorProps> = ({
   selectedFields,
   onFieldsChange,
   displayMode,
+  onDisplayModeChange,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showArraysOnly, setShowArraysOnly] = useState(false);
@@ -76,38 +78,6 @@ export const JsonFieldSelector: React.FC<JsonFieldSelectorProps> = ({
         <label className="block text-sm font-medium text-gray-300 mb-2">
           Select Fields to Display
         </label>
-        
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-3">
-            <button
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                displayMode === 'card'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-dark-700 text-gray-300 hover:bg-dark-600'
-              }`}
-            >
-              Card
-            </button>
-            <button
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                displayMode === 'table'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-dark-700 text-gray-300 hover:bg-dark-600'
-              }`}
-            >
-              Table
-            </button>
-            <button
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                displayMode === 'chart'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-dark-700 text-gray-300 hover:bg-dark-600'
-              }`}
-            >
-              Chart
-            </button>
-          </div>
-        </div>
 
         <Input
           placeholder="Search for fields..."

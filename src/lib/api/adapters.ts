@@ -45,23 +45,40 @@ export const getTopLevelFields = (data: any): JsonField[] => {
     return [];
   }
 
-  const fields: JsonField[] = [];
+  // Get all fields recursively
+  const allFields = parseJsonFields(data);
   
-  for (const key in data) {
-    if (data.hasOwnProperty(key)) {
-      const value = data[key];
-      const type = Array.isArray(value) ? 'array' : typeof value;
-      
-      fields.push({
-        path: key,
-        value,
-        type: type as any,
-        children: type === 'object' || type === 'array' ? parseJsonFields(value, key) : undefined,
-      });
+  // Filter to show:
+  // 1. All primitive values (strings, numbers, booleans)
+  // 2. All arrays (for table view)
+  // 3. Top-level objects (for nested exploration)
+  const filteredFields = allFields.filter((field) => {
+    // Always include primitives
+    if (field.type === 'string' || field.type === 'number' || field.type === 'boolean' || field.type === 'null') {
+      return true;
     }
-  }
+    // Include arrays
+    if (field.type === 'array') {
+      return true;
+    }
+    // Include top-level objects (but not deeply nested intermediate objects)
+    // This allows users to select object fields like "data.rates.USD"
+    if (field.path === 'root' || field.path.split('.').length <= 2) {
+      return true;
+    }
+    return false;
+  });
 
-  return fields;
+  // Sort fields: primitives first, then by path
+  return filteredFields.sort((a, b) => {
+    const aIsPrimitive = ['string', 'number', 'boolean', 'null'].includes(a.type);
+    const bIsPrimitive = ['string', 'number', 'boolean', 'null'].includes(b.type);
+    
+    if (aIsPrimitive && !bIsPrimitive) return -1;
+    if (!aIsPrimitive && bIsPrimitive) return 1;
+    
+    return a.path.localeCompare(b.path);
+  });
 };
 
 export const extractFieldValue = (data: any, fieldPath: string): any => {

@@ -7,7 +7,6 @@ import { WidgetRenderer } from './WidgetRenderer';
 import { AddWidgetCard } from './AddWidgetCard';
 import { generateLayout } from '@/lib/dragDrop';
 import 'react-grid-layout/css/styles.css';
-import 'react-grid-layout/css/resizable.css';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -30,7 +29,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({ onAddWidget }) => 
       minW: 3,
       minH: 3,
       maxW: 12,
-      maxH: 10,
+      maxH: 20, // Allow taller widgets
     };
     return [...layout, addWidgetLayout];
   }, [widgets]);

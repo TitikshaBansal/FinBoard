@@ -188,17 +188,7 @@ export const AddWidgetModal: React.FC<AddWidgetModalProps> = ({
             onChange={(e) => setRefreshInterval(parseInt(e.target.value) || 30)}
           />
 
-          {/* Field Selection */}
-          {testResult?.success && apiData && (
-            <JsonFieldSelector
-              fields={testResult.fields || []}
-              selectedFields={selectedFields}
-              onFieldsChange={setSelectedFields}
-              displayMode={displayMode}
-            />
-          )}
-
-          {/* Display Mode Selection */}
+          {/* Display Mode Selection - Show before field selection */}
           {testResult?.success && (
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -237,6 +227,17 @@ export const AddWidgetModal: React.FC<AddWidgetModalProps> = ({
                 </button>
               </div>
             </div>
+          )}
+
+          {/* Field Selection */}
+          {testResult?.success && apiData && (
+            <JsonFieldSelector
+              fields={testResult.fields || []}
+              selectedFields={selectedFields}
+              onFieldsChange={setSelectedFields}
+              displayMode={displayMode}
+              onDisplayModeChange={setDisplayMode}
+            />
           )}
         </div>
 

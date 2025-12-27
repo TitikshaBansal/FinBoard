@@ -19,11 +19,11 @@ export const generateLayout = (widgets: any[]): GridLayout[] => {
     x: widget.x ?? (index % 2) * 6,
     y: widget.y ?? Math.floor(index / 2) * 4,
     w: widget.w ?? 6,
-    h: widget.h ?? 4,
+    h: widget.h ?? (widget.displayMode === 'table' ? 8 : widget.displayMode === 'chart' ? 6 : 4), // Dynamic heights
     minW: 3,
     minH: 3,
     maxW: 12,
-    maxH: 10,
+    maxH: 20, // Allow taller widgets for tables
   }));
 };
 
