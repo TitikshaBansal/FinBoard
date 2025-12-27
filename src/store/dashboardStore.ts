@@ -45,13 +45,31 @@ export const useDashboardStore = create<DashboardStore>()(
       },
 
       addWidget: async (widgetData) => {
+        // Set initial dimensions based on display mode
+        const isLargeWidget = widgetData.displayMode === 'table' || widgetData.displayMode === 'chart';
+        const existingWidgets = get().widgets;
+        
+        // Calculate Y position: stack large widgets, or use grid for cards
+        let initialY = 0;
+        if (isLargeWidget) {
+          // Find the bottom of the last large widget
+          const largeWidgets = existingWidgets.filter(w => w.displayMode === 'table' || w.displayMode === 'chart');
+          if (largeWidgets.length > 0) {
+            initialY = largeWidgets.reduce((max, w) => Math.max(max, (w.y || 0) + (w.h || 12)), 0);
+          }
+        } else {
+          // Card widgets: use grid positioning
+          const cardWidgets = existingWidgets.filter(w => w.displayMode !== 'table' && w.displayMode !== 'chart');
+          initialY = Math.floor(cardWidgets.length / 2) * 4;
+        }
+        
         const newWidget: WidgetConfig = {
           ...widgetData,
           id: generateId(),
-          x: 0,
-          y: 0,
-          w: 6,
-          h: 4,
+          x: isLargeWidget ? 0 : (existingWidgets.filter(w => w.displayMode !== 'table' && w.displayMode !== 'chart').length % 2) * 6,
+          y: initialY,
+          w: isLargeWidget ? 12 : 6, // Full width for tables/charts
+          h: isLargeWidget ? 12 : 4, // Larger height for tables/charts
           isLoading: true,
           error: undefined,
         };

@@ -160,7 +160,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({ widget }) => {
 
   return (
     <BaseWidget widget={widget}>
-      <div className="h-full min-h-[250px] -mx-4 px-4">
+      <div className="h-full w-full -mx-4 px-4 flex-1 min-h-0">
         <Line data={chartData} options={chartOptions} />
       </div>
     </BaseWidget>

@@ -14,17 +14,22 @@ export interface GridLayout {
 }
 
 export const generateLayout = (widgets: any[]): GridLayout[] => {
-  return widgets.map((widget, index) => ({
-    i: widget.id,
-    x: widget.x ?? (index % 2) * 6,
-    y: widget.y ?? Math.floor(index / 2) * 4,
-    w: widget.w ?? 6,
-    h: widget.h ?? (widget.displayMode === 'table' ? 8 : widget.displayMode === 'chart' ? 6 : 4), // Dynamic heights
-    minW: 3,
-    minH: 3,
-    maxW: 12,
-    maxH: 20, // Allow taller widgets for tables
-  }));
+  return widgets.map((widget, index) => {
+    // For table and chart widgets, use full width and larger default height
+    const isLargeWidget = widget.displayMode === 'table' || widget.displayMode === 'chart';
+    
+    return {
+      i: widget.id,
+      x: widget.x ?? (isLargeWidget ? 0 : (index % 2) * 6),
+      y: widget.y ?? (isLargeWidget ? index * 12 : Math.floor(index / 2) * 4),
+      w: widget.w ?? (isLargeWidget ? 12 : 6), // Full width for tables/charts
+      h: widget.h ?? (isLargeWidget ? 12 : 4), // Larger default height for tables/charts
+      minW: isLargeWidget ? 6 : 3, // Allow resizing but keep minimum width
+      minH: isLargeWidget ? 6 : 3, // Larger minimum for tables/charts
+      maxW: 12,
+      maxH: 30, // Increased max height to allow expansion
+    };
+  });
 };
 
 export const updateWidgetLayout = (

@@ -25,10 +25,22 @@ export const BaseWidget: React.FC<BaseWidgetProps> = ({ widget, children }) => {
     }
   };
 
+  const isLargeWidget = widget.displayMode === 'table' || widget.displayMode === 'chart';
+  
   return (
-    <div className="h-full w-full bg-dark-800 rounded-xl border border-dark-600/50 shadow-sm flex flex-col overflow-hidden">
+    <div 
+      className={`w-full bg-dark-800 rounded-xl border border-dark-600/50 shadow-sm flex flex-col ${
+        isLargeWidget 
+          ? 'min-h-[50vh] max-h-[50vh] overflow-hidden' 
+          : 'h-full overflow-hidden'
+      }`}
+      style={isLargeWidget ? {
+        minHeight: '50vh',
+        maxHeight: '50vh',
+      } : undefined}
+    >
       {/* Header - Compact */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-dark-600/50 relative z-10 bg-dark-800/50">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-dark-600/50 relative z-10 bg-dark-800/50 flex-shrink-0">
         <div className="flex items-center gap-2 drag-handle cursor-move flex-1 min-w-0">
           <h3 className="text-base font-semibold text-white truncate">{widget.name}</h3>
         </div>
