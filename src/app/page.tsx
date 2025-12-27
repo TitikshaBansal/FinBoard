@@ -37,16 +37,16 @@ export default function Home() {
       <header className="bg-dark-800 border-b border-dark-700 sticky top-0 z-40">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <div className="w-8 h-8 bg-primary-600 rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">FB</span>
-                </div>
-                <h1 className="text-2xl font-bold text-white">Finance Dashboard</h1>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-primary-600 rounded flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold text-sm">FB</span>
               </div>
-              <p className="text-sm text-gray-400 ml-11">
-                {activeWidgetCount} active widget{activeWidgetCount !== 1 ? 's' : ''} - Real-time data
-              </p>
+              <div>
+                <h1 className="text-2xl font-bold text-white">Finance Dashboard</h1>
+                <p className="text-sm text-gray-400">
+                  {activeWidgetCount} active widget{activeWidgetCount !== 1 ? 's' : ''} - Real-time data
+                </p>
+              </div>
             </div>
             <Button
               variant="primary"

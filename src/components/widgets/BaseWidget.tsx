@@ -93,13 +93,7 @@ export const BaseWidget: React.FC<BaseWidgetProps> = ({ widget, children }) => {
       </div>
 
       {/* Content */}
-      <div className={`flex-1 overflow-auto min-h-0 ${
-        widget.displayMode === 'table' 
-          ? 'px-2 py-2' // Reduced padding for tables
-          : widget.displayMode === 'chart'
-          ? 'px-0 py-0' // No padding for charts
-          : 'px-4 py-3' // Normal padding for cards
-      }`}>
+      <div className="flex-1 overflow-auto px-4 py-3 min-h-0">
         {widget.isLoading ? (
           <LoadingState message="Loading data..." />
         ) : widget.error ? (

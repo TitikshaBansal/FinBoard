@@ -97,14 +97,6 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({ widget }) => {
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    layout: {
-      padding: {
-        left: 8,
-        right: 8,
-        top: 8,
-        bottom: 8,
-      },
-    },
     plugins: {
       legend: {
         display: false, // Hide legend for cleaner look
@@ -117,12 +109,12 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({ widget }) => {
         bodyColor: '#e5e7eb',
         borderColor: 'rgba(34, 197, 94, 0.3)',
         borderWidth: 1,
-        padding: 10,
+        padding: 8,
         titleFont: {
-          size: 13,
+          size: 12,
         },
         bodyFont: {
-          size: 12,
+          size: 11,
         },
       },
     },
@@ -131,11 +123,10 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({ widget }) => {
         ticks: {
           color: '#6b7280',
           font: {
-            size: 12,
+            size: 11,
           },
           maxRotation: 45,
           minRotation: 0,
-          padding: 8,
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.03)',
@@ -146,9 +137,8 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({ widget }) => {
         ticks: {
           color: '#6b7280',
           font: {
-            size: 12,
+            size: 11,
           },
-          padding: 8,
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.03)',
@@ -170,7 +160,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({ widget }) => {
 
   return (
     <BaseWidget widget={widget}>
-      <div className="h-full w-full -mx-4 -my-3 min-h-[400px]">
+      <div className="h-full min-h-[250px] -mx-4 px-4">
         <Line data={chartData} options={chartOptions} />
       </div>
     </BaseWidget>
