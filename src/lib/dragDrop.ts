@@ -14,17 +14,39 @@ export interface GridLayout {
 }
 
 export const generateLayout = (widgets: any[]): GridLayout[] => {
-  return widgets.map((widget, index) => ({
-    i: widget.id,
-    x: widget.x ?? (index % 2) * 6,
-    y: widget.y ?? Math.floor(index / 2) * 4,
-    w: widget.w ?? 6,
-    h: widget.h ?? (widget.displayMode === 'table' ? 8 : widget.displayMode === 'chart' ? 6 : 4), // Dynamic heights
-    minW: 3,
-    minH: 3,
-    maxW: 12,
-    maxH: 20, // Allow taller widgets for tables
-  }));
+  return widgets.map((widget, index) => {
+    // Determine default size based on display mode
+    let defaultW = 6; // Cards default to 6 columns
+    let defaultH = 4; // Cards default to 4 rows
+    let minW = 3;
+    let minH = 3;
+    
+    if (widget.displayMode === 'table') {
+      // Tables: wider and taller by default
+      defaultW = 10; // Span 10 columns (almost full width on 12-col grid)
+      defaultH = 10; // Taller for more rows
+      minW = 6; // Minimum width for tables
+      minH = 6; // Minimum height for tables
+    } else if (widget.displayMode === 'chart') {
+      // Charts: wide and tall for visual clarity
+      defaultW = 8; // Span 8 columns
+      defaultH = 8; // Taller for better visualization
+      minW = 5; // Minimum width for charts
+      minH = 5; // Minimum height for charts
+    }
+    
+    return {
+      i: widget.id,
+      x: widget.x ?? (index % 3) * 4, // Better distribution
+      y: widget.y ?? Math.floor(index / 3) * 4,
+      w: widget.w ?? defaultW,
+      h: widget.h ?? defaultH,
+      minW,
+      minH,
+      maxW: 12,
+      maxH: 25, // Allow even taller widgets
+    };
+  });
 };
 
 export const updateWidgetLayout = (

@@ -97,39 +97,62 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({ widget }) => {
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        left: 8,
+        right: 8,
+        top: 8,
+        bottom: 8,
+      },
+    },
     plugins: {
       legend: {
-        display: true,
-        position: 'top' as const,
-        labels: {
-          color: '#e5e7eb',
-        },
+        display: false, // Hide legend for cleaner look
       },
       tooltip: {
         mode: 'index' as const,
         intersect: false,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: '#fff',
-        bodyColor: '#fff',
-        borderColor: 'rgba(34, 197, 94, 0.5)',
+        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+        titleColor: '#e5e7eb',
+        bodyColor: '#e5e7eb',
+        borderColor: 'rgba(34, 197, 94, 0.3)',
         borderWidth: 1,
+        padding: 10,
+        titleFont: {
+          size: 13,
+        },
+        bodyFont: {
+          size: 12,
+        },
       },
     },
     scales: {
       x: {
         ticks: {
-          color: '#9ca3af',
+          color: '#6b7280',
+          font: {
+            size: 12,
+          },
+          maxRotation: 45,
+          minRotation: 0,
+          padding: 8,
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.05)',
+          color: 'rgba(255, 255, 255, 0.03)',
+          drawBorder: false,
         },
       },
       y: {
         ticks: {
-          color: '#9ca3af',
+          color: '#6b7280',
+          font: {
+            size: 12,
+          },
+          padding: 8,
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.05)',
+          color: 'rgba(255, 255, 255, 0.03)',
+          drawBorder: false,
         },
       },
     },
@@ -147,7 +170,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({ widget }) => {
 
   return (
     <BaseWidget widget={widget}>
-      <div className="h-full min-h-[300px]">
+      <div className="h-full w-full -mx-4 -my-3 min-h-[400px]">
         <Line data={chartData} options={chartOptions} />
       </div>
     </BaseWidget>

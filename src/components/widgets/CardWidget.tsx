@@ -73,10 +73,27 @@ export const CardWidget: React.FC<CardWidgetProps> = ({ widget }) => {
   const formatValue = (value: any, field: any): string => {
     if (value === null || value === undefined) return 'N/A';
     
+    // Never show raw objects or arrays
+    if (typeof value === 'object') {
+      if (Array.isArray(value)) {
+        return `${value.length} items`;
+      }
+      // For objects, try to extract a meaningful value
+      const keys = Object.keys(value);
+      if (keys.length === 0) return '{}';
+      // Return first primitive value if available
+      const firstKey = keys[0];
+      const firstValue = value[firstKey];
+      if (typeof firstValue !== 'object') {
+        return String(firstValue);
+      }
+      return `${keys.length} fields`;
+    }
+    
     if (typeof value === 'number') {
       // Try to detect if it's a currency or percentage based on field name
-      const fieldName = field.displayName || field.path.toLowerCase();
-      if (fieldName.includes('price') || fieldName.includes('amount') || fieldName.includes('value')) {
+      const fieldName = (field.displayName || field.path || '').toLowerCase();
+      if (fieldName.includes('price') || fieldName.includes('amount') || fieldName.includes('value') || fieldName.includes('usd') || fieldName.includes('balance')) {
         return formatCurrency(value);
       }
       if (fieldName.includes('percent') || fieldName.includes('change') || fieldName.includes('rate')) {
@@ -88,9 +105,9 @@ export const CardWidget: React.FC<CardWidgetProps> = ({ widget }) => {
     if (typeof value === 'string') {
       // Try to parse as number
       const numValue = parseFloat(value);
-      if (!isNaN(numValue)) {
-        const fieldName = field.displayName || field.path.toLowerCase();
-        if (fieldName.includes('price') || fieldName.includes('amount') || fieldName.includes('value')) {
+      if (!isNaN(numValue) && value.trim() !== '') {
+        const fieldName = (field.displayName || field.path || '').toLowerCase();
+        if (fieldName.includes('price') || fieldName.includes('amount') || fieldName.includes('value') || fieldName.includes('usd') || fieldName.includes('balance')) {
           return formatCurrency(numValue);
         }
         if (fieldName.includes('percent') || fieldName.includes('change') || fieldName.includes('rate')) {
@@ -98,11 +115,11 @@ export const CardWidget: React.FC<CardWidgetProps> = ({ widget }) => {
         }
         return formatNumber(numValue);
       }
+      // Truncate very long strings
+      if (value.length > 50) {
+        return value.substring(0, 47) + '...';
+      }
       return value;
-    }
-
-    if (typeof value === 'object') {
-      return JSON.stringify(value);
     }
 
     return String(value);
@@ -123,20 +140,25 @@ export const CardWidget: React.FC<CardWidgetProps> = ({ widget }) => {
 
   return (
     <BaseWidget widget={widget}>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {fieldValues.map((field, index) => {
           const displayName = field.displayName || field.alias || field.path?.split('.').pop() || 'Value';
           const formattedValue = formatValue(field.value, field);
           
+          // Never show raw JSON - if it's an object, skip it or show a message
+          if (typeof field.value === 'object' && field.value !== null && !Array.isArray(field.value)) {
+            return null; // Skip complex objects
+          }
+          
           return (
             <div
               key={field.path || index}
-              className="flex items-center justify-between py-3 border-b border-dark-700 last:border-0"
+              className="flex items-center justify-between py-2.5 border-b border-dark-700/50 last:border-0"
             >
-              <span className="text-sm font-medium text-gray-400 uppercase tracking-wide">
+              <span className="text-sm font-medium text-gray-400 uppercase tracking-wider">
                 {displayName}
               </span>
-              <span className="text-lg font-semibold text-white text-right break-words max-w-[60%]">
+              <span className="text-base font-semibold text-white text-right break-words max-w-[65%] truncate">
                 {formattedValue}
               </span>
             </div>

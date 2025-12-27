@@ -55,7 +55,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({ onAddWidget }) => 
         layouts={{ lg: gridLayout, md: gridLayout, sm: gridLayout, xs: gridLayout, xxs: gridLayout }}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-        rowHeight={layout.rowHeight}
+        rowHeight={30}
         onLayoutChange={handleLayoutChange}
         isDraggable={true}
         isResizable={true}

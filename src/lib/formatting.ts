@@ -21,6 +21,14 @@ export const formatNumber = (value: number | string, decimals: number = 2): stri
   const numValue = typeof value === 'string' ? parseFloat(value) : value;
   if (isNaN(numValue)) return String(value);
   
+  // For very large numbers, use compact notation
+  if (Math.abs(numValue) >= 1000000) {
+    return new Intl.NumberFormat('en-US', {
+      notation: 'compact',
+      maximumFractionDigits: 2,
+    }).format(numValue);
+  }
+  
   return new Intl.NumberFormat('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
